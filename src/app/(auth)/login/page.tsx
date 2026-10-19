@@ -10,7 +10,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Alert } from '@/components/ui/alert';
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 
-export default function LoginPage() {
+function LoginForm() {
   const searchParams = useSearchParams();
   const redirectParam = searchParams.get('redirect') || '/dashboard';
 
@@ -109,3 +109,12 @@ export default function LoginPage() {
     </Card>
   );
 }
+
+export default function LoginPage() {
+  return (
+    <React.Suspense fallback={<div className="h-64 flex items-center justify-center">Loading...</div>}>
+      <LoginForm />
+    </React.Suspense>
+  );
+}
+
