@@ -2,72 +2,101 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 // ============================================================================
-// Supabase Middleware Helper
-// Refreshes the auth session on every request so it doesn't expire.
+// Supabase & App Session Middleware
+// - Refreshes auth sessions
+// - Protects owner routes (/dashboard, /services, /availability, /bookings, /settings, /onboarding)
+// - Redirects authenticated users away from /login and /signup
 // ============================================================================
 
-export async function updateSession(request: NextRequest) {
-  // Gracefully skip auth when Supabase is not yet configured
-  if (
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  ) {
-    return NextResponse.next({ request });
-  }
+const LOCAL_SESSION_COOKIE = 'nsg_dev_session';
 
+export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   });
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
-          );
-          supabaseResponse = NextResponse.next({
-            request,
-          });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          );
-        },
-      },
-    }
+  const pathname = request.nextUrl.pathname;
+
+  const isProtectedRoute =
+    pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/services') ||
+    pathname.startsWith('/availability') ||
+    pathname.startsWith('/bookings') ||
+    pathname.startsWith('/settings') ||
+    pathname.startsWith('/onboarding');
+
+  const isAuthRoute =
+    pathname === '/login' ||
+    pathname === '/signup';
+
+  const hasSupabase = Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
+    !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('your-project')
   );
 
-  // Refresh session — important!
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let isAuthenticated = false;
 
-  // Protected routes: redirect to login if not authenticated
-  const isProtectedRoute =
-    request.nextUrl.pathname.startsWith('/dashboard') ||
-    request.nextUrl.pathname.startsWith('/services') ||
-    request.nextUrl.pathname.startsWith('/availability') ||
-    request.nextUrl.pathname.startsWith('/bookings') ||
-    request.nextUrl.pathname.startsWith('/settings');
+  if (hasSupabase) {
+    try {
+      const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          cookies: {
+            getAll() {
+              return request.cookies.getAll();
+            },
+            setAll(cookiesToSet) {
+              cookiesToSet.forEach(({ name, value }) =>
+                request.cookies.set(name, value)
+              );
+              supabaseResponse = NextResponse.next({
+                request,
+              });
+              cookiesToSet.forEach(({ name, value, options }) =>
+                supabaseResponse.cookies.set(name, value, options)
+              );
+            },
+          },
+        }
+      );
 
-  if (isProtectedRoute && !user) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      isAuthenticated = Boolean(user);
+    } catch (err) {
+      console.warn('Middleware Supabase session check error:', err);
+    }
+  }
+
+  // Check fallback dev session if Supabase wasn't used or had no user
+  if (!isAuthenticated) {
+    const devCookie = request.cookies.get(LOCAL_SESSION_COOKIE)?.value;
+    if (devCookie) {
+      try {
+        const parsed = JSON.parse(devCookie);
+        if (parsed?.id) {
+          isAuthenticated = true;
+        }
+      } catch {
+        // invalid cookie
+      }
+    }
+  }
+
+  // 1. Unauthenticated user trying to access protected route -> redirect to /login
+  if (isProtectedRoute && !isAuthenticated) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
-    url.searchParams.set('redirect', request.nextUrl.pathname);
+    url.searchParams.set('redirect', pathname);
     return NextResponse.redirect(url);
   }
 
-  // Auth routes: redirect to dashboard if already authenticated
-  const isAuthRoute =
-    request.nextUrl.pathname === '/login' ||
-    request.nextUrl.pathname === '/signup';
-
-  if (isAuthRoute && user) {
+  // 2. Authenticated user trying to access /login or /signup -> redirect to /dashboard
+  if (isAuthRoute && isAuthenticated) {
     const url = request.nextUrl.clone();
     url.pathname = '/dashboard';
     return NextResponse.redirect(url);
