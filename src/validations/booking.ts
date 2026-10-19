@@ -7,7 +7,7 @@ import { z } from 'zod';
 export const createBookingSchema = z.object({
   service_id: z
     .string()
-    .uuid('Invalid service ID'),
+    .min(1, 'Invalid service ID'),
   customer_name: z
     .string()
     .min(2, 'Name must be at least 2 characters')
@@ -25,7 +25,7 @@ export const createBookingSchema = z.object({
     .datetime('Invalid date/time format'),
   business_id: z
     .string()
-    .uuid('Invalid business ID'),
+    .min(1, 'Invalid business ID'),
 });
 
 export type CreateBookingInput = z.infer<typeof createBookingSchema>;
