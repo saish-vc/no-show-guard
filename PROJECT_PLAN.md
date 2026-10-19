@@ -53,14 +53,14 @@ graph TB
 
 | # | Stage | Description | Status |
 |---|-------|-------------|--------|
-| 1 | **Foundation** | Project plan, folder structure, DB schema, env vars, README skeleton | **Completed** |
-| 2 | **Auth & Onboarding** | Supabase Auth, signup/login, business profile creation | Next Up |
-| 3 | **Services CRUD** | Create, edit, toggle services | Pending |
-| 4 | **Availability Rules** | Weekly schedule management per business | Pending |
-| 5 | **Public Booking Flow** | Slug-based booking page, slot generation, double-booking prevention | Pending |
-| 6 | **Email System** | Resend integration, confirmation/reminder/cancellation templates | Pending |
-| 7 | **Reminder Cron** | Scheduled job for 24h and 2h reminders | Pending |
-| 8 | **Owner Dashboard** | Booking management, status updates | Pending |
+| 1 | **Foundation** | Project plan, folder structure, DB schema, env vars, README skeleton | **Completed** ✅ |
+| 2 | **Auth & Onboarding** | Supabase Auth, signup/login, business profile creation | **Completed** ✅ |
+| 3 | **Services CRUD** | Create, edit, toggle services | **Completed** ✅ |
+| 4 | **Availability Rules** | Weekly schedule management per business | **Completed** ✅ |
+| 5 | **Public Booking Flow** | Slug-based booking page, slot generation, double-booking prevention | **Completed** ✅ |
+| 6 | **Email System** | Resend integration, confirmation/reminder/cancellation templates | **Completed** ✅ |
+| 7 | **Reminder Cron** | Scheduled job for 24h and 2h reminders | **Completed** ✅ |
+| 8 | **Owner Dashboard** | Booking management, status updates | **Next Up** |
 | 9 | **Analytics** | Revenue, no-show rate, confirmation rate | Pending |
 | 10 | **Polish & Deploy** | README, seed data, deployment config | Pending |
 

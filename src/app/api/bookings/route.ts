@@ -4,6 +4,7 @@ import { isSupabaseConfigured } from '@/lib/auth';
 import { syncFromCookies, readDevStore, writeDevStore } from '@/lib/dev-store';
 import { createBookingSchema } from '@/validations/booking';
 import { doIntervalsOverlap } from '@/lib/slots';
+import { sendBookingConfirmationEmail } from '@/lib/email';
 import { addMinutes, parseISO } from 'date-fns';
 import type { Booking, BookingEvent, Service, Business } from '@/types';
 
@@ -117,6 +118,32 @@ export async function POST(request: NextRequest) {
         },
       });
 
+      // 7. Send booking confirmation email
+      const { data: bizData } = await supabase
+        .from('businesses')
+        .select('*')
+        .eq('id', input.business_id)
+        .maybeSingle();
+
+      try {
+        await sendBookingConfirmationEmail({
+          businessName: bizData?.name || 'Your Provider',
+          businessType: bizData?.business_type,
+          businessTimezone: bizData?.timezone || 'UTC',
+          serviceName: service.name,
+          durationMinutes: service.duration_minutes,
+          price: service.price,
+          customerName: input.customer_name,
+          customerEmail: input.customer_email,
+          startsAtUtc: input.starts_at_utc,
+          endsAtUtc: endsAtUtc,
+          cancellationPolicy: bizData?.cancellation_policy || null,
+          confirmationToken: confirmationToken,
+        });
+      } catch (err) {
+        console.warn('Booking confirmation email send failed:', err);
+      }
+
       return NextResponse.json(
         {
           success: true,
@@ -195,6 +222,28 @@ export async function POST(request: NextRequest) {
     store.bookings.push(newBooking);
     store.booking_events.push(newEvent);
     writeDevStore(store);
+
+    const business =
+      store.businesses.find((b) => b.id === input.business_id) || store.businesses[0];
+
+    try {
+      await sendBookingConfirmationEmail({
+        businessName: business?.name || 'Your Provider',
+        businessType: business?.business_type,
+        businessTimezone: business?.timezone || 'UTC',
+        serviceName: service.name,
+        durationMinutes: service.duration_minutes,
+        price: service.price,
+        customerName: input.customer_name,
+        customerEmail: input.customer_email,
+        startsAtUtc: input.starts_at_utc,
+        endsAtUtc: endsAtUtc,
+        cancellationPolicy: business?.cancellation_policy || null,
+        confirmationToken: confirmationToken,
+      });
+    } catch (err) {
+      console.warn('Booking confirmation email send failed:', err);
+    }
 
     return NextResponse.json(
       {
