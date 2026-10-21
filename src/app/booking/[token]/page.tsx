@@ -27,7 +27,7 @@ export default async function BookingTokenPage({ params }: BookingTokenPageProps
           <p className="text-sm text-zinc-500">
             We could not find an appointment with this secure confirmation token. The link may have expired or is invalid.
           </p>
-          <Link href="/" className="inline-block pt-2 text-indigo-600 font-semibold text-sm">
+          <Link href="/" className="inline-block pt-2 text-emerald-600 font-semibold text-sm">
             &larr; Return to NoShowGuard Homepage
           </Link>
         </Card>

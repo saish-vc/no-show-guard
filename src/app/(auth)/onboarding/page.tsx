@@ -71,7 +71,7 @@ export default function OnboardingPage() {
   return (
     <Card className="shadow-lg border-zinc-200 max-w-xl mx-auto">
       <CardHeader className="space-y-1 text-center pb-6">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-semibold mx-auto mb-2">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-semibold mx-auto mb-2">
           <Sparkles className="h-3.5 w-3.5" /> Initial Setup • Step 1 of 1
         </div>
         <CardTitle className="text-2xl font-bold tracking-tight text-zinc-900">
@@ -140,10 +140,10 @@ export default function OnboardingPage() {
               helperText="Only lowercase letters, numbers, and hyphens (min 3 chars)"
             />
             {slug && (
-              <div className="rounded-lg bg-indigo-50/60 border border-indigo-100 p-2.5 text-xs text-indigo-950 flex items-center gap-2">
-                <Globe className="h-3.5 w-3.5 text-indigo-600 shrink-0" />
+              <div className="rounded-lg bg-emerald-50/60 border border-emerald-100 p-2.5 text-xs text-emerald-950 flex items-center gap-2">
+                <Globe className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
                 <span className="text-zinc-500">Your public link:</span>
-                <span className="font-mono font-medium text-indigo-700 truncate">
+                <span className="font-mono font-medium text-emerald-700 truncate">
                   /book/{slug || 'your-slug'}
                 </span>
               </div>

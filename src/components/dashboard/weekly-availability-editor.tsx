@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Alert } from '@/components/ui/alert';
 import { DAYS_OF_WEEK } from '@/lib/constants';
 import { Clock, Save, RotateCcw, CheckCircle2 } from 'lucide-react';
+import { useToast } from '@/components/ui/toast';
 import type { AvailabilityRule } from '@/types';
 
 interface WeeklyAvailabilityEditorProps {
@@ -46,6 +47,7 @@ function buildInitialSchedule(rules: AvailabilityRule[]): DaySchedule[] {
 }
 
 export function WeeklyAvailabilityEditor({ initialRules }: WeeklyAvailabilityEditorProps) {
+  const { toast } = useToast();
   const [schedule, setSchedule] = React.useState<DaySchedule[]>(() =>
     buildInitialSchedule(initialRules)
   );
@@ -101,22 +103,32 @@ export function WeeklyAvailabilityEditor({ initialRules }: WeeklyAvailabilityEdi
     const result = await saveWeeklyAvailabilityAction(activeRules);
     if (result.error) {
       setError(result.error);
+      toast.error(result.error);
     } else {
       setSuccess(true);
+      toast.success('Weekly availability schedule saved successfully!');
     }
     setSaving(false);
   };
 
   const activeDaysCount = schedule.filter((d) => d.is_active).length;
 
+  const totalWeeklyHours = schedule
+    .filter((d) => d.is_active && d.start_time < d.end_time)
+    .reduce((acc, d) => {
+      const [sh, sm] = d.start_time.split(':').map(Number);
+      const [eh, em] = d.end_time.split(':').map(Number);
+      return acc + (eh * 60 + em - (sh * 60 + sm)) / 60;
+    }, 0);
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Availability</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Weekly Availability</h1>
           <p className="text-sm text-zinc-500">
-            Set your weekly business hours. Customers can only book during active time windows.
+            Set your weekly working hours and booking windows. Customers can only book appointments during active hours.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -124,11 +136,53 @@ export function WeeklyAvailabilityEditor({ initialRules }: WeeklyAvailabilityEdi
             <RotateCcw className="h-4 w-4 mr-1.5" />
             Reset to 9–5 Weekdays
           </Button>
-          <Button id="save-availability-btn" onClick={handleSave} isLoading={saving}>
+          <Button id="save-availability-btn" onClick={handleSave} isLoading={saving} className="bg-emerald-700 hover:bg-emerald-800 text-white shadow-sm">
             <Save className="h-4 w-4 mr-2" />
-            Save Schedule
+            Save Availability
           </Button>
         </div>
+      </div>
+
+      {/* Stitch KPI Stats Summary Bar */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <Card className="bg-white border-zinc-200 shadow-xs">
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Open Days</p>
+              <p className="text-2xl font-bold text-zinc-900 mt-0.5">{activeDaysCount} <span className="text-sm font-normal text-zinc-500">/ 7 days</span></p>
+              <p className="text-[11px] text-zinc-400">Weekly active schedule</p>
+            </div>
+            <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+              <Clock className="h-5 w-5" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-white border-zinc-200 shadow-xs">
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Total Available Hours</p>
+              <p className="text-2xl font-bold text-zinc-900 mt-0.5">{totalWeeklyHours.toFixed(1)} <span className="text-sm font-normal text-zinc-500">hrs/week</span></p>
+              <p className="text-[11px] text-zinc-400">Total bookable time capacity</p>
+            </div>
+            <div className="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+              <CheckCircle2 className="h-5 w-5" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-white border-zinc-200 shadow-xs">
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Slot Generation</p>
+              <p className="text-2xl font-bold text-zinc-900 mt-0.5">Dynamic</p>
+              <p className="text-[11px] text-zinc-400">Tailored to service duration</p>
+            </div>
+            <div className="h-10 w-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
+              <Clock className="h-5 w-5" />
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {error && <Alert variant="error">{error}</Alert>}
@@ -170,7 +224,7 @@ export function WeeklyAvailabilityEditor({ initialRules }: WeeklyAvailabilityEdi
                         }
                         className="sr-only peer"
                       />
-                      <div className="w-10 h-5 bg-zinc-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all" />
+                      <div className="w-10 h-5 bg-zinc-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-emerald-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-emerald-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all" />
                     </label>
                     <span
                       className={`font-medium text-sm ${
@@ -195,7 +249,7 @@ export function WeeklyAvailabilityEditor({ initialRules }: WeeklyAvailabilityEdi
                           className={`h-9 px-3 text-sm rounded-lg border ${
                             timeError
                               ? 'border-red-300 focus:ring-red-500'
-                              : 'border-zinc-300 focus:ring-indigo-500'
+                              : 'border-zinc-300 focus:ring-emerald-500'
                           } bg-white focus:outline-none focus:ring-2 transition-colors w-[130px]`}
                         />
                       </div>
@@ -209,7 +263,7 @@ export function WeeklyAvailabilityEditor({ initialRules }: WeeklyAvailabilityEdi
                         className={`h-9 px-3 text-sm rounded-lg border ${
                           timeError
                             ? 'border-red-300 focus:ring-red-500'
-                            : 'border-zinc-300 focus:ring-indigo-500'
+                            : 'border-zinc-300 focus:ring-emerald-500'
                         } bg-white focus:outline-none focus:ring-2 transition-colors w-[130px]`}
                       />
                       {timeError && (
@@ -234,7 +288,7 @@ export function WeeklyAvailabilityEditor({ initialRules }: WeeklyAvailabilityEdi
       <Card>
         <CardContent className="p-5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+            <div className="h-10 w-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
               <CheckCircle2 className="h-5 w-5" />
             </div>
             <div>

@@ -99,7 +99,7 @@ function LoginForm() {
             Don&apos;t have an account?{' '}
             <Link
               href="/signup"
-              className="font-medium text-indigo-600 hover:text-indigo-500 hover:underline"
+              className="font-medium text-emerald-600 hover:text-emerald-500 hover:underline"
             >
               Create business account
             </Link>

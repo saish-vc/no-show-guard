@@ -23,11 +23,11 @@ export default async function PublicBookingPage({ params }: BookPageProps) {
           </div>
           <h1 className="text-xl font-bold text-zinc-900">Booking Page Not Found</h1>
           <p className="text-sm text-zinc-500">
-            We couldn&apos;t find a business with the link slug <code className="text-indigo-600 font-semibold">{slug}</code>. Please verify the URL or contact the business directly.
+            We couldn&apos;t find a business with the link slug <code className="text-emerald-600 font-semibold">{slug}</code>. Please verify the URL or contact the business directly.
           </p>
           <Link
             href="/"
-            className="inline-flex items-center text-sm font-semibold text-indigo-600 hover:text-indigo-500 hover:underline pt-2"
+            className="inline-flex items-center text-sm font-semibold text-emerald-600 hover:text-emerald-500 hover:underline pt-2"
           >
             Go to NoShowGuard Homepage &rarr;
           </Link>
@@ -40,7 +40,7 @@ export default async function PublicBookingPage({ params }: BookPageProps) {
     <div className="min-h-screen bg-zinc-50/60 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto mb-6 flex items-center justify-between text-xs text-zinc-500">
         <div className="flex items-center gap-1.5 font-medium text-zinc-700">
-          <ShieldCheck className="h-4 w-4 text-indigo-600" />
+          <ShieldCheck className="h-4 w-4 text-emerald-600" />
           <span>Powered by NoShowGuard</span>
         </div>
         <span>Safe & Encrypted Booking</span>

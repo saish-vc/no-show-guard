@@ -18,6 +18,7 @@ import {
   Briefcase,
   Loader2,
 } from 'lucide-react';
+import { useToast } from '@/components/ui/toast';
 import type { Service } from '@/types';
 
 interface ServiceListClientProps {
@@ -25,6 +26,7 @@ interface ServiceListClientProps {
 }
 
 export function ServiceListClient({ initialServices }: ServiceListClientProps) {
+  const { toast } = useToast();
   const [services, setServices] = React.useState<Service[]>(initialServices);
   const [showModal, setShowModal] = React.useState(false);
   const [editingService, setEditingService] = React.useState<Service | null>(null);
@@ -59,11 +61,14 @@ export function ServiceListClient({ initialServices }: ServiceListClientProps) {
   const handleToggle = async (service: Service) => {
     setLoadingAction(service.id);
     setActionError(null);
-    const result = await toggleServiceActiveAction(service.id, !service.is_active);
+    const newStatus = !service.is_active;
+    const result = await toggleServiceActiveAction(service.id, newStatus);
     if (result.error) {
       setActionError(result.error);
+      toast.error(result.error);
     } else {
       await refreshServices();
+      toast.success(newStatus ? `"${service.name}" activated.` : `"${service.name}" archived.`);
     }
     setLoadingAction(null);
   };
@@ -75,8 +80,10 @@ export function ServiceListClient({ initialServices }: ServiceListClientProps) {
     const result = await deleteServiceAction(service.id);
     if (result.error) {
       setActionError(result.error);
+      toast.error(result.error);
     } else {
       await refreshServices();
+      toast.success(`"${service.name}" deleted successfully.`);
     }
     setLoadingAction(null);
   };
@@ -89,16 +96,73 @@ export function ServiceListClient({ initialServices }: ServiceListClientProps) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Services</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Services & Pricing</h1>
           <p className="text-sm text-zinc-500">
-            Define the services customers can book. Active services appear on your public booking page.
+            Define your service offerings, session durations, and rates. Active services appear on your public booking page.
           </p>
         </div>
-        <Button id="add-service-btn" onClick={openCreate}>
+        <Button id="add-service-btn" onClick={openCreate} className="bg-emerald-700 hover:bg-emerald-800 text-white shadow-sm">
           <Plus className="h-4 w-4 mr-2" />
-          Add Service
+          Add New Service
         </Button>
       </div>
+
+      {/* Stitch KPI Stats Summary Bar */}
+      {services.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Card className="bg-white border-zinc-200 shadow-xs">
+            <CardContent className="p-4 flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Active Services</p>
+                <p className="text-2xl font-bold text-zinc-900 mt-0.5">{activeServices.length}</p>
+                <p className="text-[11px] text-zinc-400">Available to customers</p>
+              </div>
+              <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+                <Briefcase className="h-5 w-5" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white border-zinc-200 shadow-xs">
+            <CardContent className="p-4 flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Average Duration</p>
+                <p className="text-2xl font-bold text-zinc-900 mt-0.5">
+                  {activeServices.length > 0
+                    ? Math.round(
+                        activeServices.reduce((acc, s) => acc + s.duration_minutes, 0) / activeServices.length
+                      )
+                    : 0}{' '}
+                  <span className="text-sm font-normal text-zinc-500">mins</span>
+                </p>
+                <p className="text-[11px] text-zinc-400">Per appointment slot</p>
+              </div>
+              <div className="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                <Clock className="h-5 w-5" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white border-zinc-200 shadow-xs">
+            <CardContent className="p-4 flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Average Value</p>
+                <p className="text-2xl font-bold text-zinc-900 mt-0.5">
+                  ${activeServices.length > 0
+                    ? (
+                        activeServices.reduce((acc, s) => acc + Number(s.price), 0) / activeServices.length
+                      ).toFixed(2)
+                    : '0.00'}
+                </p>
+                <p className="text-[11px] text-zinc-400">Across active services</p>
+              </div>
+              <div className="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+                <DollarSign className="h-5 w-5" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {actionError && (
         <Alert variant="error">{actionError}</Alert>
@@ -108,7 +172,7 @@ export function ServiceListClient({ initialServices }: ServiceListClientProps) {
       {services.length === 0 && (
         <Card className="text-center py-16">
           <CardContent className="space-y-4 max-w-sm mx-auto">
-            <div className="h-14 w-14 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 mx-auto">
+            <div className="h-14 w-14 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 mx-auto">
               <Briefcase className="h-7 w-7" />
             </div>
             <div>
@@ -166,6 +230,26 @@ export function ServiceListClient({ initialServices }: ServiceListClientProps) {
           </div>
         </div>
       )}
+
+      {/* Stitch Deposit & Cancellation Policy Card */}
+      <Card className="bg-gradient-to-r from-emerald-50/80 via-white to-zinc-50 border-emerald-100/80 shadow-xs">
+        <CardContent className="p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100/70 px-2 py-0.5 rounded">
+                Cancellation & Attendance Policy
+              </span>
+              <span className="text-xs text-zinc-400">Guaranteed Protection</span>
+            </div>
+            <p className="text-sm text-zinc-700 font-medium">
+              Automated reminders are dispatched 24h &amp; 2h before every scheduled session to prevent empty chairs.
+            </p>
+          </div>
+          <span className="text-xs text-emerald-700 bg-white border border-emerald-200 px-3 py-1.5 rounded-lg shadow-2xs font-semibold whitespace-nowrap">
+            Active on all services
+          </span>
+        </CardContent>
+      </Card>
 
       {/* Modal */}
       {showModal && (

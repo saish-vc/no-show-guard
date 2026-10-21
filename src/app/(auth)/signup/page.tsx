@@ -19,7 +19,7 @@ export default function SignupPage() {
   return (
     <Card className="shadow-lg border-zinc-200">
       <CardHeader className="space-y-1 text-center pb-6">
-        <div className="mx-auto h-12 w-12 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 mb-2">
+        <div className="mx-auto h-12 w-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 mb-2">
           <ShieldCheck className="h-6 w-6" />
         </div>
         <CardTitle className="text-2xl font-bold tracking-tight text-zinc-900">
@@ -118,7 +118,7 @@ export default function SignupPage() {
             Already have an account?{' '}
             <Link
               href="/login"
-              className="font-medium text-indigo-600 hover:text-indigo-500 hover:underline"
+              className="font-medium text-emerald-600 hover:text-emerald-500 hover:underline"
             >
               Sign in
             </Link>

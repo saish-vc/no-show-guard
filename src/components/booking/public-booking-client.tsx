@@ -210,14 +210,14 @@ export function PublicBookingClient({
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Business Header Card */}
       <Card className="border-zinc-200 shadow-sm overflow-hidden bg-white">
-        <div className="bg-gradient-to-r from-indigo-600 via-indigo-700 to-indigo-800 px-6 py-8 text-white">
+        <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 px-6 py-8 text-white">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Badge variant="secondary" className="bg-white/20 text-white hover:bg-white/30 border-0 capitalize">
                   {business.business_type}
                 </Badge>
-                <div className="flex items-center text-xs text-indigo-100 gap-1">
+                <div className="flex items-center text-xs text-emerald-100 gap-1">
                   <ShieldCheck className="h-3.5 w-3.5" />
                   Verified Business
                 </div>
@@ -225,7 +225,7 @@ export function PublicBookingClient({
               <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">
                 {business.name}
               </h1>
-              <p className="text-indigo-100 text-sm mt-1">
+              <p className="text-emerald-100 text-sm mt-1">
                 Book your appointment online · Instant confirmation & email reminders
               </p>
             </div>
@@ -273,7 +273,7 @@ export function PublicBookingClient({
       {/* Step 1: Select Service */}
       <section className="space-y-4">
         <div className="flex items-center gap-2">
-          <div className="h-6 w-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold">
+          <div className="h-6 w-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold">
             1
           </div>
           <h2 className="text-lg font-bold text-zinc-900">Select a Service</h2>
@@ -294,7 +294,7 @@ export function PublicBookingClient({
                   onClick={() => setSelectedService(srv)}
                   className={`cursor-pointer rounded-xl border p-5 transition-all text-left relative ${
                     isSelected
-                      ? 'border-indigo-600 bg-indigo-50/40 ring-2 ring-indigo-600/20 shadow-xs'
+                      ? 'border-emerald-600 bg-emerald-50/40 ring-2 ring-emerald-600/20 shadow-xs'
                       : 'border-zinc-200 bg-white hover:border-zinc-300 hover:shadow-xs'
                   }`}
                 >
@@ -308,7 +308,7 @@ export function PublicBookingClient({
                       )}
                     </div>
                     {isSelected && (
-                      <CheckCircle2 className="h-5 w-5 text-indigo-600 shrink-0" />
+                      <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
                     )}
                   </div>
 
@@ -332,7 +332,7 @@ export function PublicBookingClient({
       {selectedService && (
         <section className="space-y-4 animate-in fade-in duration-200">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold">
+            <div className="h-6 w-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold">
               2
             </div>
             <h2 className="text-lg font-bold text-zinc-900">Choose a Date</h2>
@@ -355,19 +355,19 @@ export function PublicBookingClient({
                     onClick={() => setSelectedDate(d.dateStr)}
                     className={`flex flex-col items-center justify-center w-16 h-20 rounded-xl border text-center transition-all ${
                       isSelected
-                        ? 'border-indigo-600 bg-indigo-600 text-white shadow-sm font-semibold'
+                        ? 'border-emerald-600 bg-emerald-600 text-white shadow-sm font-semibold'
                         : isClosed
                         ? 'border-zinc-100 bg-zinc-50 text-zinc-300 cursor-not-allowed opacity-60'
                         : 'border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50'
                     }`}
                   >
-                    <span className={`text-[11px] uppercase ${isSelected ? 'text-indigo-100' : 'text-zinc-400'}`}>
+                    <span className={`text-[11px] uppercase ${isSelected ? 'text-emerald-100' : 'text-zinc-400'}`}>
                       {d.dayName}
                     </span>
                     <span className="text-lg font-bold my-0.5">
                       {d.dayNumber}
                     </span>
-                    <span className={`text-[10px] ${isSelected ? 'text-indigo-100' : 'text-zinc-400'}`}>
+                    <span className={`text-[10px] ${isSelected ? 'text-emerald-100' : 'text-zinc-400'}`}>
                       {d.monthName}
                     </span>
                   </button>
@@ -383,7 +383,7 @@ export function PublicBookingClient({
         <section className="space-y-4 animate-in fade-in duration-200">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="h-6 w-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold">
+              <div className="h-6 w-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold">
                 3
               </div>
               <h2 className="text-lg font-bold text-zinc-900">Select a Time Slot</h2>
@@ -395,7 +395,7 @@ export function PublicBookingClient({
 
           {loadingSlots ? (
             <div className="py-12 flex flex-col items-center justify-center gap-2 text-zinc-400">
-              <Loader2 className="h-6 w-6 animate-spin text-indigo-600" />
+              <Loader2 className="h-6 w-6 animate-spin text-emerald-600" />
               <span className="text-sm">Finding open slots...</span>
             </div>
           ) : slots.length === 0 ? (
@@ -417,12 +417,12 @@ export function PublicBookingClient({
                     onClick={() => setSelectedSlot(slot)}
                     className={`py-3 px-3 rounded-lg border text-center transition-all ${
                       isSelected
-                        ? 'border-indigo-600 bg-indigo-600 text-white font-semibold shadow-xs'
-                        : 'border-zinc-200 bg-white text-zinc-800 hover:border-indigo-300 hover:bg-indigo-50/50'
+                        ? 'border-emerald-600 bg-emerald-600 text-white font-semibold shadow-xs'
+                        : 'border-zinc-200 bg-white text-zinc-800 hover:border-emerald-300 hover:bg-emerald-50/50'
                     }`}
                   >
                     <div className="text-sm font-semibold">{slot.display_time.split('–')[0]?.trim()}</div>
-                    <div className={`text-[11px] ${isSelected ? 'text-indigo-100' : 'text-zinc-400'}`}>
+                    <div className={`text-[11px] ${isSelected ? 'text-emerald-100' : 'text-zinc-400'}`}>
                       to {slot.display_time.split('–')[1]?.trim()}
                     </div>
                   </button>
@@ -437,7 +437,7 @@ export function PublicBookingClient({
       {selectedService && selectedSlot && (
         <section className="space-y-4 animate-in fade-in duration-200">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold">
+            <div className="h-6 w-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold">
               4
             </div>
             <h2 className="text-lg font-bold text-zinc-900">Your Contact Details</h2>
@@ -498,7 +498,7 @@ export function PublicBookingClient({
                 </div>
                 <div className="flex justify-between text-zinc-600">
                   <span>Time:</span>
-                  <span className="font-semibold text-indigo-700">
+                  <span className="font-semibold text-emerald-700">
                     {selectedDate} · {selectedSlot.display_time} ({business.timezone})
                   </span>
                 </div>

@@ -19,7 +19,7 @@ export default function HomePage() {
       <header className="border-b border-zinc-100 bg-white/80 backdrop-blur-md sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="h-9 w-9 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-xs">
+            <div className="h-9 w-9 rounded-lg bg-emerald-600 flex items-center justify-center text-white shadow-xs">
               <ShieldCheck className="h-5 w-5" />
             </div>
             <span className="font-bold text-lg text-zinc-900 tracking-tight">
@@ -45,12 +45,12 @@ export default function HomePage() {
       {/* Hero Section */}
       <main className="flex-1">
         <section className="py-20 sm:py-28 px-4 sm:px-6 max-w-5xl mx-auto text-center space-y-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-semibold">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-semibold">
             <Sparkles className="h-3.5 w-3.5" /> Stop losing revenue to empty slots
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-zinc-900 leading-tight">
-            Cut appointment no-shows by <span className="text-indigo-600">80%</span> with zero extra effort
+            Cut appointment no-shows by <span className="text-emerald-600">80%</span> with zero extra effort
           </h1>
 
           <p className="max-w-2xl mx-auto text-lg text-zinc-600 leading-relaxed">
@@ -98,7 +98,7 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="rounded-2xl border border-zinc-200 bg-white p-6 space-y-3 shadow-xs">
-                <div className="h-10 w-10 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
+                <div className="h-10 w-10 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
                   <CalendarCheck className="h-5 w-5" />
                 </div>
                 <h3 className="font-semibold text-lg text-zinc-900">Simple Public Booking</h3>
@@ -135,7 +135,7 @@ export default function HomePage() {
       <footer className="border-t border-zinc-200 bg-white py-8 text-center text-xs text-zinc-500">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 text-indigo-600" />
+            <ShieldCheck className="h-4 w-4 text-emerald-600" />
             <span className="font-semibold text-zinc-800">{APP_NAME}</span>
             <span>— The appointment no-show guard.</span>
           </div>

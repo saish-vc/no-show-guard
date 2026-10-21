@@ -4,18 +4,16 @@ import { getAuthSession } from '@/lib/auth';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { DashboardStatsClient } from '@/components/dashboard/dashboard-stats-client';
 import {
   Calendar,
   CheckCircle2,
-  Clock,
   ArrowRight,
-  TrendingUp,
-  AlertTriangle,
-  UserX,
-  DollarSign,
   Share2,
   Briefcase,
   Sparkles,
+  Clock,
+  ArrowUpRight,
 } from 'lucide-react';
 
 export default async function DashboardPage() {
@@ -28,145 +26,113 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8">
       {/* Welcome Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-900 via-indigo-800 to-indigo-950 p-6 sm:p-8 text-white shadow-md">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-900 via-emerald-800 to-violet-950 p-6 sm:p-8 text-white shadow-lg">
+        {/* Background decoration */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-violet-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4" />
+
         <div className="relative z-10 max-w-2xl space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200 text-xs font-medium">
-            <Sparkles className="h-3.5 w-3.5 text-indigo-300" /> Business Profile Active
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-200 text-xs font-medium">
+            <Sparkles className="h-3.5 w-3.5 text-emerald-300" /> Business Profile Active
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
-            Welcome to {business.name}
+            Welcome back, {business.name}
           </h1>
-          <p className="text-sm sm:text-base text-indigo-100/90 leading-relaxed">
-            Your appointment booking system is ready. Protect your schedule from costly no-shows with automated 24h & 2h reminders.
+          <p className="text-sm sm:text-base text-emerald-100/90 leading-relaxed">
+            Manage your appointments, track no-shows, and keep your schedule running smoothly with automated reminders.
           </p>
           <div className="pt-2 flex flex-wrap items-center gap-3">
-            <Link href={`/book/${business.booking_slug}`} target="_blank">
-              <Button size="md" className="bg-white text-indigo-900 hover:bg-indigo-50 border-0">
-                <Share2 className="h-4 w-4 mr-2 text-indigo-600" />
-                Preview Public Booking Page
+            <Link href="/bookings">
+              <Button size="md" className="bg-white text-emerald-900 hover:bg-emerald-50 border-0">
+                <Calendar className="h-4 w-4 mr-2 text-emerald-600" />
+                View All Bookings
               </Button>
             </Link>
-            <Link href="/services">
-              <Button size="md" variant="secondary" className="bg-indigo-700/50 hover:bg-indigo-700 text-white border-indigo-600">
-                <Briefcase className="h-4 w-4 mr-2" />
-                Add Your Services
-                <ArrowRight className="h-4 w-4 ml-1" />
+            <Link href={`/book/${business.booking_slug}`} target="_blank">
+              <Button size="md" variant="secondary" className="bg-emerald-700/50 hover:bg-emerald-700 text-white border-emerald-600">
+                <Share2 className="h-4 w-4 mr-2" />
+                Public Booking Page
+                <ArrowUpRight className="h-3.5 w-3.5 ml-1" />
               </Button>
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Setup Checklist */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold text-zinc-900">
-            Setup Progress
-          </CardTitle>
-          <CardDescription>
-            Complete these steps to start accepting client bookings
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/40">
-              <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
-              <div>
-                <div className="font-semibold text-sm text-emerald-950">1. Business Profile</div>
-                <div className="text-xs text-emerald-800">Completed (slug: /{business.booking_slug})</div>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-zinc-200 bg-white">
-              <div className="h-5 w-5 rounded-full border-2 border-indigo-600 flex items-center justify-center text-indigo-600 text-xs font-bold shrink-0 mt-0.5">
-                2
-              </div>
-              <div className="space-y-1">
-                <div className="font-semibold text-sm text-zinc-900">2. Create Services</div>
-                <div className="text-xs text-zinc-500">Define services, prices, and durations</div>
-                <Link href="/services" className="inline-flex text-xs font-medium text-indigo-600 hover:underline">
-                  Configure services →
-                </Link>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3 p-3.5 rounded-xl border border-zinc-200 bg-white">
-              <div className="h-5 w-5 rounded-full border-2 border-zinc-300 flex items-center justify-center text-zinc-400 text-xs font-bold shrink-0 mt-0.5">
-                3
-              </div>
-              <div className="space-y-1">
-                <div className="font-semibold text-sm text-zinc-900">3. Set Weekly Hours</div>
-                <div className="text-xs text-zinc-500">Set availability windows for each day</div>
-                <Link href="/availability" className="inline-flex text-xs font-medium text-indigo-600 hover:underline">
-                  Set hours →
-                </Link>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Metrics Row */}
+      {/* Live Metrics */}
       <div>
-        <h2 className="text-base font-semibold text-zinc-900 mb-4">
-          Appointment Overview
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="p-6 flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-zinc-500">Total Bookings</p>
-                <p className="text-2xl font-bold text-zinc-900 mt-1">0</p>
-                <p className="text-xs text-zinc-400 mt-0.5">All time appointments</p>
-              </div>
-              <div className="h-10 w-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
-                <Calendar className="h-5 w-5" />
-              </div>
-            </CardContent>
-          </Card>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-base font-semibold text-zinc-900">
+            Appointment Overview
+          </h2>
+          <Link href="/bookings" className="text-xs text-emerald-600 hover:text-emerald-800 font-medium inline-flex items-center gap-1">
+            All Bookings <ArrowRight className="h-3 w-3" />
+          </Link>
+        </div>
+        <DashboardStatsClient />
+      </div>
 
-          <Card>
-            <CardContent className="p-6 flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-zinc-500">Confirmed</p>
-                <p className="text-2xl font-bold text-emerald-600 mt-1">0</p>
-                <p className="text-xs text-zinc-400 mt-0.5">Customer verified</p>
+      {/* Quick Links */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <Link href="/services" className="block group">
+          <Card className="p-5 hover:border-emerald-200 hover:shadow-md transition-all h-full">
+            <div className="flex items-start gap-3">
+              <div className="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+                <Briefcase className="h-5 w-5" />
               </div>
-              <div className="h-10 w-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
+              <div className="space-y-1 flex-1">
+                <h3 className="font-semibold text-sm text-zinc-900 group-hover:text-emerald-700 transition-colors">
+                  Manage Services
+                </h3>
+                <p className="text-xs text-zinc-500">
+                  Create, edit, and toggle your service offerings
+                </p>
+              </div>
+              <ArrowUpRight className="h-4 w-4 text-zinc-300 group-hover:text-emerald-500 transition-colors shrink-0 mt-1" />
+            </div>
+          </Card>
+        </Link>
+
+        <Link href="/availability" className="block group">
+          <Card className="p-5 hover:border-emerald-200 hover:shadow-md transition-all h-full">
+            <div className="flex items-start gap-3">
+              <div className="h-10 w-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 shrink-0">
+                <Clock className="h-5 w-5" />
+              </div>
+              <div className="space-y-1 flex-1">
+                <h3 className="font-semibold text-sm text-zinc-900 group-hover:text-emerald-700 transition-colors">
+                  Set Availability
+                </h3>
+                <p className="text-xs text-zinc-500">
+                  Configure your weekly working hours
+                </p>
+              </div>
+              <ArrowUpRight className="h-4 w-4 text-zinc-300 group-hover:text-emerald-500 transition-colors shrink-0 mt-1" />
+            </div>
+          </Card>
+        </Link>
+
+        <Link href="/settings" className="block group">
+          <Card className="p-5 hover:border-emerald-200 hover:shadow-md transition-all h-full">
+            <div className="flex items-start gap-3">
+              <div className="h-10 w-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 shrink-0">
                 <CheckCircle2 className="h-5 w-5" />
               </div>
-            </CardContent>
+              <div className="space-y-1 flex-1">
+                <h3 className="font-semibold text-sm text-zinc-900 group-hover:text-emerald-700 transition-colors">
+                  Business Settings
+                </h3>
+                <p className="text-xs text-zinc-500">
+                  Update your business profile and policies
+                </p>
+              </div>
+              <ArrowUpRight className="h-4 w-4 text-zinc-300 group-hover:text-emerald-500 transition-colors shrink-0 mt-1" />
+            </div>
           </Card>
-
-          <Card>
-            <CardContent className="p-6 flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-zinc-500">No-Show Rate</p>
-                <p className="text-2xl font-bold text-zinc-900 mt-1">0.0%</p>
-                <p className="text-xs text-zinc-400 mt-0.5">Target: &lt; 5%</p>
-              </div>
-              <div className="h-10 w-10 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600">
-                <UserX className="h-5 w-5" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6 flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-zinc-500">Est. Revenue</p>
-                <p className="text-2xl font-bold text-zinc-900 mt-1">$0.00</p>
-                <p className="text-xs text-zinc-400 mt-0.5">Completed appointments</p>
-              </div>
-              <div className="h-10 w-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
-                <DollarSign className="h-5 w-5" />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        </Link>
       </div>
 
-      {/* Business Profile Details Card */}
+      {/* Business Details */}
       <Card>
         <CardHeader>
           <CardTitle className="text-base font-semibold text-zinc-900">
@@ -192,7 +158,7 @@ export default async function DashboardPage() {
             </div>
             <div>
               <dt className="text-zinc-500 text-xs font-medium uppercase tracking-wider">Booking Slug</dt>
-              <dd className="font-mono font-semibold text-indigo-600 mt-1">/{business.booking_slug}</dd>
+              <dd className="font-mono font-semibold text-emerald-600 mt-1">/{business.booking_slug}</dd>
             </div>
           </dl>
           {business.cancellation_policy && (

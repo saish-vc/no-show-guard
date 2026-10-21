@@ -40,16 +40,18 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           rows={rows}
           required={required}
+          aria-invalid={error ? 'true' : undefined}
+          aria-describedby={error ? `${textareaId}-error` : helperText ? `${textareaId}-helper` : undefined}
           className={cn(
-            'flex w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 transition-colors',
+            'flex w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 disabled:cursor-not-allowed disabled:opacity-50 transition-colors',
             error && 'border-red-500 focus:ring-red-500 focus:border-red-500',
             className
           )}
           {...props}
         />
-        {error && <p className="text-xs text-red-600 font-medium">{error}</p>}
+        {error && <p id={`${textareaId}-error`} role="alert" className="text-xs text-red-600 font-medium">{error}</p>}
         {helperText && !error && (
-          <p className="text-xs text-zinc-500">{helperText}</p>
+          <p id={`${textareaId}-helper`} className="text-xs text-zinc-500">{helperText}</p>
         )}
       </div>
     );

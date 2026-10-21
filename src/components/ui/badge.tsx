@@ -11,7 +11,7 @@ export function Badge({
   ...props
 }: BadgeProps) {
   const variants = {
-    default: 'bg-indigo-100 text-indigo-800 border-transparent',
+    default: 'bg-emerald-100 text-emerald-800 border-transparent',
     secondary: 'bg-zinc-100 text-zinc-800 border-transparent',
     outline: 'border-zinc-200 text-zinc-700 bg-white',
     success: 'bg-emerald-100 text-emerald-800 border-transparent',

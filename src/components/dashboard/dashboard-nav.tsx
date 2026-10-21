@@ -68,13 +68,13 @@ export function DashboardNav({ user, business, children }: DashboardNavProps) {
             onClick={() => setMobileMenuOpen(false)}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
               isActive
-                ? 'bg-indigo-50 text-indigo-700 font-semibold'
+                ? 'bg-emerald-50 text-emerald-700 font-semibold'
                 : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
             }`}
           >
             <Icon
               className={`h-4 w-4 ${
-                isActive ? 'text-indigo-600' : 'text-zinc-400'
+                isActive ? 'text-emerald-600' : 'text-zinc-400'
               }`}
             />
             {item.label}
@@ -92,7 +92,7 @@ export function DashboardNav({ user, business, children }: DashboardNavProps) {
           {/* Logo */}
           <div className="h-16 px-6 border-b border-zinc-200 flex items-center justify-between">
             <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-xs">
+              <div className="h-8 w-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white shadow-xs">
                 <ShieldCheck className="h-5 w-5" />
               </div>
               <span className="font-bold text-base text-zinc-900 tracking-tight">
@@ -146,7 +146,7 @@ export function DashboardNav({ user, business, children }: DashboardNavProps) {
       {/* Mobile Header */}
       <header className="md:hidden flex items-center justify-between h-16 px-4 border-b border-zinc-200 bg-white sticky top-0 z-20">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white">
+          <div className="h-8 w-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white">
             <ShieldCheck className="h-4 w-4" />
           </div>
           <span className="font-bold text-base text-zinc-900">NoShowGuard</span>

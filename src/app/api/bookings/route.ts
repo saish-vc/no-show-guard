@@ -6,6 +6,7 @@ import { createBookingSchema } from '@/validations/booking';
 import { doIntervalsOverlap } from '@/lib/slots';
 import { sendBookingConfirmationEmail } from '@/lib/email';
 import { addMinutes, parseISO } from 'date-fns';
+import { rateLimit, getClientIp } from '@/lib/rate-limit';
 import type { Booking, BookingEvent, Service, Business } from '@/types';
 
 // ============================================================================
@@ -15,6 +16,23 @@ import type { Booking, BookingEvent, Service, Business } from '@/types';
 
 export async function POST(request: NextRequest) {
   try {
+    // 0. Rate limiting / abuse protection
+    const clientIp = getClientIp(request.headers);
+    const rl = rateLimit(`booking_create_${clientIp}`, { limit: 10, windowMs: 5 * 60 * 1000 });
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Too many booking attempts. Please wait a few minutes before trying again.' },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': rl.resetInSeconds.toString(),
+            'X-RateLimit-Limit': rl.limit.toString(),
+            'X-RateLimit-Remaining': '0',
+          },
+        }
+      );
+    }
+
     const body = await request.json();
 
     // 1. Zod input validation

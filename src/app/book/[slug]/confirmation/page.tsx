@@ -46,7 +46,7 @@ export default async function BookingConfirmationPage({
           <p className="text-sm text-zinc-500">
             Please use the link provided in your booking confirmation to view your appointment.
           </p>
-          <Link href={`/book/${slug}`} className="inline-block pt-2 text-indigo-600 font-semibold text-sm">
+          <Link href={`/book/${slug}`} className="inline-block pt-2 text-emerald-600 font-semibold text-sm">
             &larr; Return to booking page
           </Link>
         </Card>
@@ -65,7 +65,7 @@ export default async function BookingConfirmationPage({
           <p className="text-sm text-zinc-500">
             We could not find an appointment with this confirmation token.
           </p>
-          <Link href={`/book/${slug}`} className="inline-block pt-2 text-indigo-600 font-semibold text-sm">
+          <Link href={`/book/${slug}`} className="inline-block pt-2 text-emerald-600 font-semibold text-sm">
             &larr; Return to booking page
           </Link>
         </Card>
@@ -100,9 +100,9 @@ export default async function BookingConfirmationPage({
 
         {/* Appointment Card */}
         <Card className="border-zinc-200 shadow-sm overflow-hidden bg-white">
-          <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 px-6 py-4 text-white flex items-center justify-between">
+          <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-4 text-white flex items-center justify-between">
             <div>
-              <p className="text-xs text-indigo-100 uppercase tracking-wider font-semibold">
+              <p className="text-xs text-emerald-100 uppercase tracking-wider font-semibold">
                 {business.name}
               </p>
               <h2 className="text-lg font-bold">{service.name}</h2>
@@ -114,13 +114,13 @@ export default async function BookingConfirmationPage({
 
           <CardContent className="p-6 space-y-5">
             {/* Time & Date */}
-            <div className="rounded-xl bg-indigo-50/60 border border-indigo-100 p-4 space-y-1">
-              <div className="flex items-center gap-2 text-indigo-950 font-bold text-base">
-                <Calendar className="h-4 w-4 text-indigo-600" />
+            <div className="rounded-xl bg-emerald-50/60 border border-emerald-100 p-4 space-y-1">
+              <div className="flex items-center gap-2 text-emerald-950 font-bold text-base">
+                <Calendar className="h-4 w-4 text-emerald-600" />
                 <span>{formattedDate}</span>
               </div>
-              <div className="flex items-center gap-2 text-indigo-800 text-sm font-medium pl-6">
-                <Clock className="h-3.5 w-3.5 text-indigo-500" />
+              <div className="flex items-center gap-2 text-emerald-800 text-sm font-medium pl-6">
+                <Clock className="h-3.5 w-3.5 text-emerald-500" />
                 <span>
                   {formattedStartTime} – {formattedEndTime} ({timeZone})
                 </span>
